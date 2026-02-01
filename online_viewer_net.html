@@ -1,0 +1,173 @@
+Put your HTML text here<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Valentine Proposal for Gaurav 💌</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      background: #ffe6f0;
+      color: #d1005f;
+      overflow: hidden;
+      height: 100vh;
+      margin: 0;
+      padding-top: 50px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #d1005f;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      z-index: 10;
+      position: relative;
+    }
+
+    button:hover {
+      background-color: #ff3399;
+    }
+
+    #message {
+      font-size: 24px;
+      margin-top: 50px;
+      line-height: 1.5;
+    }
+
+    .heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: #ff3366;
+      transform: rotate(45deg);
+      animation: float 5s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: #ff3366;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -15px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 15px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(-600px) rotate(45deg); opacity: 0; }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>💌 A Special Valentine Proposal 💌</h1>
+  <p>Click the button to see your Valentine message, Gaurav!</p>
+  <button onclick="showMessage()">Open Your Proposal</button>
+  <div id="message"></div>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    const messages = [
+      "Roses are red, violets are blue, Gaurav, my heart is sweet, just for you! ❤️",
+      "Gaurav, will you be my Valentine? 💖",
+      "From the first moment, Gaurav, I knew… I want to spend every Valentine with you! 🌹",
+      "Gaurav, you + me = 💘 Forever Valentine?"
+    ];
+
+    function showMessage() {
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      document.getElementById("message").innerHTML = messages[randomIndex];
+      createHearts(20);
+      startConfetti();
+    }
+
+    // Floating hearts
+    function createHearts(num) {
+      for (let i = 0; i < num; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.animationDuration = 3 + Math.random() * 3 + "s";
+        heart.style.width = 20 + Math.random() * 20 + "px";
+        heart.style.height = 20 + Math.random() * 20 + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+
+    // Confetti effect
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confettiParticles = [];
+
+    function createParticle() {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 10 + 2,
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        tilt: Math.random() * 10 - 10
+      };
+    }
+
+    for (let i = 0; i < 150; i++) confettiParticles.push(createParticle());
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < confettiParticles.length; i++) {
+        const p = confettiParticles[i];
+        ctx.beginPath();
+        ctx.lineWidth = p.r;
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+        ctx.lineTo(p.x + p.tilt, p.y + p.r);
+        ctx.stroke();
+        p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+        p.x += Math.sin(p.d);
+        if (p.y > canvas.height) confettiParticles[i] = createParticle();
+      }
+      requestAnimationFrame(drawConfetti);
+    }
+
+    function startConfetti() {
+      drawConfetti();
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
